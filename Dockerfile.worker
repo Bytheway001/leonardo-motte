@@ -1,0 +1,58 @@
+
+FROM ruby:3.3.0
+
+# Set environment variables
+ARG APP_PATH="/home/developer/myapp"
+ARG APP_USER="developer"
+ARG APP_GROUP="developer"
+ARG APP_USER_UID=1000
+ARG APP_GROUP_GID=1000
+ARG PORT=3000
+
+ENV VITE_APP_API_URL = $VITE_APP_API_URL
+ENV RAILS_ENV=$RAILS_ENV
+ENV PATH="/opt/node-v14.17.1-linux-x64/bin:${PATH}"
+
+# Set working directory
+WORKDIR $APP_PATH
+
+# Install necessary packages
+RUN apt-get update && \
+    apt-get install -y \
+    build-essential \
+    libpq-dev \
+    tzdata \
+    libxml2-dev \
+    curl \
+    postgresql-client \
+    bash \
+    git \
+    wget \
+    wkhtmltopdf \
+    tar && \
+    rm -rf /var/lib/apt/lists/*
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+RUN apt-get install -y nodejs
+
+# Add application user and group
+RUN groupadd --gid $APP_GROUP_GID $APP_GROUP && \
+    useradd --uid $APP_USER_UID --gid $APP_GROUP --no-create-home --shell /sbin/nologin $APP_USER && \
+    mkdir -p $APP_PATH && \
+    chown $APP_USER:$APP_GROUP $APP_PATH
+
+RUN npm install -g yarn
+# Copy Gemfile and Gemfile.lock
+COPY --chown=$APP_USER:$APP_USER Gemfile* $APP_PATH/
+RUN bundle install
+
+
+COPY entrypoint.sh /usr/bin
+RUN chmod +x /usr/bin/entrypoint.sh
+USER $DOCKER_USER
+
+# Copy application code
+COPY . $APP_PATH/
+
+# Set entrypoint and default command
+ENTRYPOINT ["entrypoint.sh"]
+CMD bundle exec sidekiq -C config/sidekiq.yml

@@ -1,0 +1,59 @@
+services:
+    db:
+        container_name: motte-database
+        image: postgres:14-alpine
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+        ports:
+            - 5432:5432
+        volumes:
+            - ./:/home/developer/myapp
+            - pg_data:/var/lib/postgresql/data
+    rails:
+        container_name: motte-rails
+        build:
+            context: ./
+            args:
+                DOCKER_USER_UID: 1000
+                DOCKER_USER: developer
+            dockerfile: Dockerfile
+        volumes:
+            - ./:/home/developer/myapp
+            - /tmp/.X11-unix:/tmp/.X11-unix
+        ports:
+            - 500:3000
+            - 3036:3036
+        environment:
+            REDIS_URL: redis://redis:6379/0
+            VITE_RUBY_HOST: '0.0.0.0'
+            RAILS_ENV: development
+            DATABASE_URL: postgres://postgres:postgres@db:5432/goldsmith_development
+            TEST_DATABASE_URL: postgres://postgres:postgres@db:5432/goldsmith_test
+            VITE_APP_API_URL: 'http://localhost:600/api/v1'
+            PORT: 3000
+            HEADLESS: true
+            DISPLAY: ${DISPLAY}
+    redis:
+        image: redis:latest
+        container_name: motte-redis
+        ports:
+            - 6379:6379
+    sidekiq:
+        container_name: motte-sidekiq
+        build:
+            context: ./
+            args:
+                DOCKER_USER_UID: 1000
+                DOCKER_USER: developer
+            dockerfile: Dockerfile.worker
+        command: bundle exec sidekiq
+        volumes:
+            - ./:/home/developer/myapp
+        depends_on:
+            - redis
+        environment:
+            REDIS_URL: redis://redis:6379/0
+            DATABASE_URL: postgres://postgres:postgres@db:5432/goldsmith_development
+volumes:
+    pg_data:
