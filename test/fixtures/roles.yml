@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  position: MyString
+  start_date: 2024-09-03
+  placement_date: 2024-09-03
+  status_id: 1
+
+two:
+  name: MyString
+  position: MyString
+  start_date: 2024-09-03
+  placement_date: 2024-09-03
+  status_id: 1
