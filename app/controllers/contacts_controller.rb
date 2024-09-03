@@ -15,17 +15,21 @@ class ContactsController < ApplicationController
   # POST
   def create
     @contact = Contact.new(contact_params)
+    
     if @contact.save
       render json: @contact, status: :created
-   
+    else
+      render json: { errors: @contact.errors.full_messages }, status: :unprocessable_entity
+    end
   end
 
   # PUT
   def update
-  
     if @contact.update(contact_params)
       render json: @contact
-   
+    else
+      render json: { errors: @contact.errors.full_messages }, status: :unprocessable_entity
+    end
   end
 
   # DELETE
@@ -44,7 +48,5 @@ class ContactsController < ApplicationController
     params.require(:contact).permit(:first_name, :last_name, :phone_number, :li_public, :alias)
   end
 
-  def json_request?
-    request.format.json?
-  end
+ 
 end
