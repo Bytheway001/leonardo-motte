@@ -41,11 +41,8 @@ class RolesController < ApplicationController
   private
 
   def set_role
-    @role = Role.find_by(id: params[:id])
-    if @role.nil?
-      render json: { error: 'Role not found' }, status: :not_found
-      return
-    end
+    @role = Role.find(params[:id])
+   
   end
 
   def role_params
