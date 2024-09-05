@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_04_183856) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_03_164020) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -24,16 +24,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_04_183856) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "matches", force: :cascade do |t|
-    t.bigint "contact_id", null: false
-    t.bigint "role_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["contact_id", "role_id"], name: "index_matches_on_contact_id_and_role_id", unique: true
-    t.index ["contact_id"], name: "index_matches_on_contact_id"
-    t.index ["role_id"], name: "index_matches_on_role_id"
-  end
-
   create_table "roles", force: :cascade do |t|
     t.string "name"
     t.integer "position"
@@ -43,7 +33,4 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_04_183856) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
-
-  add_foreign_key "matches", "contacts"
-  add_foreign_key "matches", "roles"
 end

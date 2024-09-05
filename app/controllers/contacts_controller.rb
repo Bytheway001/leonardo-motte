@@ -1,7 +1,7 @@
 class ContactsController < ApplicationController
-  before_action :set_contact, only: [:show, :destroy, :update, :role_count]
+  before_action :set_contacts, only: [:show, :destroy, :update]
 
-  # GET /contacts
+  # GET 
   def index
     @contacts = Contact.all
     render json: @contacts
@@ -12,7 +12,7 @@ class ContactsController < ApplicationController
     render json: @contact
   end
 
-  # POST /contacts
+  # POST
   def create
     @contact = Contact.new(contact_params)
     
@@ -23,7 +23,7 @@ class ContactsController < ApplicationController
     end
   end
 
-  # PUT /contacts/:id
+  # PUT
   def update
     if @contact.update(contact_params)
       render json: @contact
@@ -32,25 +32,21 @@ class ContactsController < ApplicationController
     end
   end
 
-  # DELETE /contacts/:id
+  # DELETE
   def destroy
     @contact.destroy
     head :no_content
   end
 
-  # GET /contacts/:id/role_count
-  def role_count
-    role_ids = @contact.roles.pluck(:id)
-    render json: { contact_id: @contact.id, role_ids: role_ids }
-  end
-
   private
 
-  def set_contact
+  def set_contacts
     @contact = Contact.find(params[:id])
   end
 
   def contact_params
     params.require(:contact).permit(:first_name, :last_name, :phone_number, :li_public, :alias)
   end
+
+ 
 end
