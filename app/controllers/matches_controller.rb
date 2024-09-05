@@ -1,8 +1,10 @@
 class MatchesController < ApplicationController
-  # POST /matches
+
   def create
+   
     @match = Match.new(match_params)
     
+    # Intenta guardar el match en la base de datos
     if @match.save
       render json: @match, status: :created
     else
@@ -10,16 +12,18 @@ class MatchesController < ApplicationController
     end
   end
 
+  # Lista todas las relaciones (matches)
   # GET /matches
   def index
     @matches = Match.all
     render json: @matches
   end
 
+  # Muestra un match específico
   # GET /matches/:id
   def show
+    # Busca el match por su ID
     @match = Match.find_by(id: params[:id])
-    
     if @match
       render json: @match
     else
@@ -27,10 +31,11 @@ class MatchesController < ApplicationController
     end
   end
 
+
   # DELETE /matches/:id
   def destroy
+    # Busca el match por su ID
     @match = Match.find(params[:id])
-    
     if @match.destroy
       head :no_content
     else
@@ -38,23 +43,28 @@ class MatchesController < ApplicationController
     end
   end
 
+  # Obtiene todos los matches asociados a un contacto específico
   # GET /contacts/:contact_id/matches
   def matches_for_contact
-    @contact = Contact.find_by(id: params[:contact_id])
     
+    @contact = Contact.find(params[:id])
+
+    # Si se encuentra el contacto, busca los matches asociados con ese contacto
     if @contact
-      @matches = @contact.matches
-      render json: @matches
+      # Incluye los roles asociados a los matches
+      @matches = @contact.matches.includes(:role)
+      # Devuelve una lista de los roles y sus IDs en formato JSON
+      render json: @matches.map { |match| { role: match.role.name, role_id: match.role_id } }
     else
-      render json: { error: 'Contact not found' }, status: :not_found
+
+      render json: { error: 'Contacto no encontrado' }, status: :not_found
     end
   end
 
   private
 
-  # Permite solo los parámetros permitidos para la creación y actualización de matches
+  # Solo permite los parámetros contact_id y role_id para crear o actualizar matches
   def match_params
     params.require(:match).permit(:contact_id, :role_id)
   end
 end
-
