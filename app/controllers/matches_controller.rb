@@ -23,7 +23,7 @@ class MatchesController < ApplicationController
   # GET /matches/:id
   def show
     # Busca el match por su ID
-    @match = Match.find_by(id: params[:id])
+    @match = Match.find(id: params[:id])
     if @match
       render json: @match
     else
@@ -34,8 +34,6 @@ class MatchesController < ApplicationController
 
   # DELETE /matches/:id
   def destroy
-    # Busca el match por su ID
-    @match = Match.find(params[:id])
     if @match.destroy
       head :no_content
     else
@@ -52,7 +50,7 @@ class MatchesController < ApplicationController
     # Si se encuentra el contacto, busca los matches asociados con ese contacto
     if @contact
       # Incluye los roles asociados a los matches
-      @matches = @contact.matches.includes(:role)
+      @matches = @contact.matches
       # Devuelve una lista de los roles y sus IDs en formato JSON
       render json: @matches.map { |match| { role: match.role.name, role_id: match.role_id } }
     else
