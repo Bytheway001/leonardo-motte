@@ -1,15 +1,17 @@
 Rails.application.routes.draw do
   resources :contacts do
-    # Ruta para obtener los matches de un contacto específico
+    get 'employment_histories', on: :member  # Custom route to fetch employment histories for a contact
+    resources :employment_histories, only: [:index, :show, :create, :update, :destroy]
     get 'matches', on: :member
   end
 
   resources :roles do
-    # Ruta para obtener los matches de un rol específico
     get 'matches', on: :member
   end
 
-  # Define las rutas para crear, eliminar, listar y mostrar matches
   resources :matches, only: [:create, :destroy, :index, :show]
-  resources :companies
+
+  resources :companies do
+    resources :employment_histories, only: [:index, :show, :create, :update, :destroy]
+  end
 end

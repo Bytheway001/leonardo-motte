@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_09_152745) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_09_195816) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -30,6 +30,17 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_09_152745) do
     t.string "alias"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "employment_histories", force: :cascade do |t|
+    t.date "start_date"
+    t.date "end_date"
+    t.boolean "primary"
+    t.boolean "current"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "contact_id"
+    t.integer "company_id"
   end
 
   create_table "matches", force: :cascade do |t|
