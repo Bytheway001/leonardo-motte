@@ -11,4 +11,5 @@ Rails.application.routes.draw do
 
   # Define las rutas para crear, eliminar, listar y mostrar matches
   resources :matches, only: [:create, :destroy, :index, :show]
+  resources :companies
 end
