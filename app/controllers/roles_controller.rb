@@ -1,5 +1,5 @@
 class RolesController < ApplicationController
-  before_action :set_role, only: [:show, :update, :destroy, :contact_count, :matches_for_role]
+  before_action :set_role, only: [:show, :update, :destroy,  :matches]
 
   # GET /roles
   def index
@@ -11,7 +11,11 @@ class RolesController < ApplicationController
   def show
     render json: @role
   end
-
+  def contact_count
+    #  tiene una relación con `contacts`
+    count = @role.contacts.count
+    render json: { contact_count: count }
+  end
   # POST /roles
   def create
     @role = Role.new(role_params)
@@ -39,7 +43,7 @@ class RolesController < ApplicationController
   end
 
   # GET /roles/:id/matches - Para obtener los matches de un rol
-  def matches_for_role
+  def matches
     @matches = @role.matches
     render json: @matches.map { |match| { contact: match.contact.alias, contact_id: match.contact_id } }
   end
