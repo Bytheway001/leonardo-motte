@@ -1,20 +1,19 @@
 class CompaniesController < ApplicationController
-  before_action :set_company, only: [:destroy, :update]
+  before_action :set_company, only: [:show, :update, :destroy]
 
   def index
     @companies = Company.all
     render json: @companies
   end
 
-  def new
-    @company = Company.new
+  def show
+    @company = Company.find(params[:company])
   end
 
   def create
     @company = Company.new(company_params)
-  
     if @company.save
-      render json: @company, status: :created 
+      render json: @company, status: :created
     else
       render json: { errors: @company.errors.full_messages }, status: :unprocessable_entity
     end
