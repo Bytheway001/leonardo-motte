@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_20_005543) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_21_203806) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -30,6 +30,17 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_20_005543) do
     t.string "alias"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "education_histories", force: :cascade do |t|
+    t.bigint "school_id"
+    t.string "title"
+    t.date "start_date"
+    t.date "degree_date"
+    t.boolean "undergrad"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["school_id"], name: "index_education_histories_on_school_id"
   end
 
   create_table "employment_histories", force: :cascade do |t|
@@ -65,6 +76,12 @@ ActiveRecord::Schema[7.2].define(version: 2024_09_20_005543) do
     t.date "start_date"
     t.date "placement_date"
     t.integer "status_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "schools", force: :cascade do |t|
+    t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
