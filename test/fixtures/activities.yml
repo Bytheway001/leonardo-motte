@@ -3,9 +3,9 @@
 one:
   name: MyString
   activityable: one
-  activityable_type: Activityable
+  activityable_type: activitable
 
 two:
   name: MyString
   activityable: two
-  activityable_type: Activityable
+  activityable_type: activitable

@@ -1,6 +1,6 @@
 class Role < ApplicationRecord
 
-  has_many :activities, as: :activityable  # Relación polimórfica
+  has_many :activities, as: :activitable  # Relación polimórfica
   
   validates :name, presence: true
   validates :position, presence: true
