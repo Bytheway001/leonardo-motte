@@ -10,9 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_09_21_203806) do
+
+ActiveRecord::Schema[7.2].define(version: 2024_09_23_035356) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "activities", force: :cascade do |t|
+    t.string "name"
+    t.string "activityable_type", null: false
+    t.bigint "activityable_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["activityable_type", "activityable_id"], name: "index_activities_on_activityable"
+  end
 
   create_table "companies", force: :cascade do |t|
     t.string "name"

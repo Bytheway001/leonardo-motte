@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  activityable: one
+  activityable_type: activitable
+
+two:
+  name: MyString
+  activityable: two
+  activityable_type: activitable
