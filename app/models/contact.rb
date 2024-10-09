@@ -1,6 +1,7 @@
 class Contact < ApplicationRecord
   has_many :employment_histories
   has_many :companies, through: :employment_histories
+  has_many :emails
   
   validates :first_name, presence: true
   validates :last_name, presence: true
