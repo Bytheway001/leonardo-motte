@@ -19,4 +19,5 @@ Rails.application.routes.draw do
   resources :companies do
     resources :employment_histories, only: [:index, :show, :create, :update, :destroy]
   end
+  resources :education_histories
 end
